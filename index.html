@@ -28,8 +28,8 @@
   <script>
     // Config padrão para Element SDK (cores, textos e tipografia)
     const defaultConfig = {
-      background_color: "#0a0a0a",     // BACKGROUND - preto escuro
-      surface_color: "#141414",        // SECONDARY_SURFACE - preto mais claro para cards
+      background_color: "#000000",     // BACKGROUND - preto puro
+      surface_color: "#000000",        // SECONDARY_SURFACE - preto puro para cards
       text_color: "#ffffff",           // TEXT - branco
       primary_action_color: "#f97316", // PRIMARY_ACTION - laranja forte
       secondary_action_color: "#ff8c42", // SECONDARY_ACTION - laranja claro
@@ -359,7 +359,7 @@
            <div class="flex items-center justify-center md:justify-start gap-3"><span class="text-main font-semibold text-sm min-w-[120px]">Domingo</span> <span class="text-slate-400 text-sm">Fechado</span>
            </div>
           </div>
-         </div><!-- Botões de ação -->
+         </div><!-- Botões de a��ão -->
          <div class="flex-shrink-0 flex flex-col gap-3"><button data-nav-target="page-supplements" class="btn-primary focus-ring inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider">
            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
            </svg><span>Ver Suplementos</span> </button> <button class="btn-secondary whatsapp-link focus-ring inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider border-2">
@@ -381,14 +381,14 @@
       <div class="space-y-4">
        <h2 class="section-title text-main font-bold text-xl accent-orange">Whey Protein</h2>
        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Lista de Whey Protein"><!-- Carnibol -->
-        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/YeRokZa.jpg" alt="Carnibol Whey Protein" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
-         <div class="space-y-1">
-          <p class="text-main text-sm font-semibold">Carnibol</p>
-          <p class="badge-text text-[11px] text-slate-400">Sabores: Blueberry, Baunilha</p>
+        <article class="surface-panel rounded-xl sm:rounded-2xl border border-slate-800 p-3 sm:p-4 card-hover flex flex-col gap-2 sm:gap-3"><img src="https://i.imgur.com/YeRokZa.jpg" alt="Carnibol Whey Protein" class="w-full aspect-square rounded-lg sm:rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-0.5 sm:space-y-1">
+          <p class="text-main text-sm sm:text-base font-semibold">Carnibol</p>
+          <p class="badge-text text-[10px] sm:text-[11px] text-slate-400">Sabores: Blueberry, Baunilha</p>
          </div>
-         <p class="accent-orange text-base font-bold">R$ 199,90</p><button onclick="openWhatsAppProduct('Carnibol')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
-          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-          </svg><span>Chamar no WhatsApp</span> </button>
+         <p class="accent-orange text-lg sm:text-xl font-bold">R$ 199,90</p><button onclick="openWhatsAppProduct('Carnibol')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>WhatsApp</span> </button>
         </article><!-- Max Whey 100% Refil -->
         <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/66pvUEM.jpg" alt="Max Whey 100% Refil" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
          <div class="space-y-1">
@@ -700,5 +700,5 @@
     </div>
    </footer>
   </div>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9acecab917588dd8',t:'MTc2NTU1ODk3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9aced256b4ef8dd8',t:'MTc2NTU1OTI4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
