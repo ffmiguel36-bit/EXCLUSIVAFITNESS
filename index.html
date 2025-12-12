@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full w-full">
+ <head>
+  <meta charset="UTF-8">
+  <title>EXCLUSIVA FITNESS - Loja de Suplementos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script><!-- Canva SDKs -->
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    /* Classe base para foco visível em todos os elementos interativos */
+    .focus-ring:focus-visible {
+      outline: 2px solid #f97316;
+      outline-offset: 2px;
+    }
+    /* Pequena animação de hover em cartões */
+    .card-hover {
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+      border-color: #f97316;
+    }
+  </style>
+  <script>
+    // Config padrão para Element SDK (cores, textos e tipografia)
+    const defaultConfig = {
+      background_color: "#0a0a0a",     // BACKGROUND - preto escuro
+      surface_color: "#141414",        // SECONDARY_SURFACE - preto mais claro para cards
+      text_color: "#ffffff",           // TEXT - branco
+      primary_action_color: "#f97316", // PRIMARY_ACTION - laranja forte
+      secondary_action_color: "#ff8c42", // SECONDARY_ACTION - laranja claro
+      font_family: "Oswald",
+      font_size: 16,
+
+      // Textos editáveis
+      home_hero_title: "EXCLUSIVA FITNESS",
+      home_hero_subtitle: "Suplementos premium e atendimento exclusivo para você atingir seus resultados.",
+      whatsapp_button_text: "Fale Conosco no WhatsApp",
+      supplements_title: "Suplementos",
+      footer_address: "Jardins Mangueiral QC 10, Conjunto 04, Lote 04, Área Comercial, São Sebastião - DF"
+    };
+
+    // Função que aplica o config na interface
+    async function applyConfig(config) {
+      const merged = Object.assign({}, defaultConfig, config || {});
+      const root = document.documentElement;
+      const body = document.body;
+
+      const bgColor = merged.background_color;
+      const surfaceColor = merged.surface_color;
+      const textColor = merged.text_color;
+      const primaryColor = merged.primary_action_color;
+      const secondaryColor = merged.secondary_action_color;
+      const baseFont = merged.font_family || defaultConfig.font_family;
+      const baseFontSize = merged.font_size || defaultConfig.font_size;
+
+      const fullFontStack = `${baseFont}, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`;
+
+      // Aplica cores de fundo principais
+      body.style.backgroundColor = bgColor;
+      body.style.color = textColor;
+      body.style.fontFamily = fullFontStack;
+      body.style.fontSize = baseFontSize + "px";
+
+      const appWrapper = document.getElementById("app-wrapper");
+      if (appWrapper) {
+        appWrapper.style.backgroundColor = bgColor;
+        appWrapper.style.color = textColor;
+        appWrapper.style.fontFamily = fullFontStack;
+        appWrapper.style.fontSize = baseFontSize + "px";
+      }
+
+      // Navbar
+      const navbar = document.getElementById("main-navbar");
+      if (navbar) {
+        navbar.style.backgroundColor = bgColor;
+        navbar.style.borderBottomColor = "#1f2937";
+      }
+      document.querySelectorAll(".nav-link").forEach(el => {
+        el.style.color = textColor;
+      });
+      const logoMain = document.getElementById("logo-main");
+      const logoSub = document.getElementById("logo-sub");
+      if (logoMain) logoMain.style.color = primaryColor;
+      if (logoSub) logoSub.style.color = textColor;
+
+      // Botões principais
+      document.querySelectorAll(".btn-primary").forEach(btn => {
+        btn.style.backgroundColor = primaryColor;
+        btn.style.color = "#020617";
+        btn.onmouseenter = () => {
+          btn.style.backgroundColor = secondaryColor;
+        };
+        btn.onmouseleave = () => {
+          btn.style.backgroundColor = primaryColor;
+        };
+      });
+
+      // Botões secundários / links de navegação selecionados
+      document.querySelectorAll(".btn-secondary").forEach(btn => {
+        btn.style.borderColor = secondaryColor;
+        btn.style.color = secondaryColor;
+        btn.onmouseenter = () => {
+          btn.style.backgroundColor = secondaryColor;
+          btn.style.color = "#020617";
+        };
+        btn.onmouseleave = () => {
+          btn.style.backgroundColor = "transparent";
+          btn.style.color = secondaryColor;
+        };
+      });
+
+      // Superfícies (cards, seções principais)
+      document.querySelectorAll(".surface-panel").forEach(panel => {
+        panel.style.backgroundColor = surfaceColor;
+      });
+
+      // Títulos e textos
+      document.querySelectorAll(".text-main").forEach(el => {
+        el.style.color = textColor;
+        el.style.fontFamily = fullFontStack;
+      });
+
+      // Acentos em laranja
+      document.querySelectorAll(".accent-orange").forEach(el => {
+        el.style.color = primaryColor;
+      });
+
+      // Font sizing proporcional
+      const heroTitle = document.getElementById("home-hero-title");
+      const heroSubtitle = document.getElementById("home-hero-subtitle");
+      const sectionTitles = document.querySelectorAll(".section-title");
+      const badgeTexts = document.querySelectorAll(".badge-text");
+      const footerText = document.getElementById("footer-address");
+
+      if (heroTitle) heroTitle.style.fontSize = (baseFontSize * 2.5) + "px";
+      if (heroSubtitle) heroSubtitle.style.fontSize = (baseFontSize * 1) + "px";
+      sectionTitles.forEach(el => {
+        el.style.fontSize = (baseFontSize * 1.5) + "px";
+      });
+      badgeTexts.forEach(el => {
+        el.style.fontSize = (baseFontSize * 0.85) + "px";
+      });
+      if (footerText) footerText.style.fontSize = (baseFontSize * 0.85) + "px";
+
+      // Textos vindos do config
+      if (heroTitle) heroTitle.textContent = merged.home_hero_title || defaultConfig.home_hero_title;
+      if (heroSubtitle) heroSubtitle.textContent = merged.home_hero_subtitle || defaultConfig.home_hero_subtitle;
+
+      const whatsappButtons = document.querySelectorAll(".whatsapp-button-text");
+      whatsappButtons.forEach(btn => {
+        btn.textContent = merged.whatsapp_button_text || defaultConfig.whatsapp_button_text;
+      });
+
+      const supplementsTitleEl = document.getElementById("supplements-title");
+      if (supplementsTitleEl) {
+        supplementsTitleEl.textContent = merged.supplements_title || defaultConfig.supplements_title;
+      }
+
+      const footerAddressEl = document.getElementById("footer-address");
+      if (footerAddressEl) {
+        footerAddressEl.textContent = merged.footer_address || defaultConfig.footer_address;
+      }
+    }
+
+    // Inicializa Element SDK se disponível
+    (function initElementSdk() {
+      if (!window.elementSdk) {
+        // Se não estiver no ambiente Canva, apenas aplica config padrão
+        window.addEventListener("DOMContentLoaded", function () {
+          applyConfig(defaultConfig);
+        });
+        return;
+      }
+
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          await applyConfig(config);
+        },
+        mapToCapabilities: (config) => {
+          const merged = Object.assign({}, defaultConfig, config || {});
+
+          const backgroundRecolorable = {
+            get: () => merged.background_color,
+            set: (value) => {
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          };
+
+          const surfaceRecolorable = {
+            get: () => merged.surface_color,
+            set: (value) => {
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          };
+
+          const textRecolorable = {
+            get: () => merged.text_color,
+            set: (value) => {
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          };
+
+          const primaryActionRecolorable = {
+            get: () => merged.primary_action_color,
+            set: (value) => {
+              window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          };
+
+          const secondaryActionRecolorable = {
+            get: () => merged.secondary_action_color,
+            set: (value) => {
+              window.elementSdk.setConfig({ secondary_action_color: value });
+            }
+          };
+
+          const fontEditable = {
+            get: () => merged.font_family,
+            set: (value) => {
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          };
+
+          const fontSizeable = {
+            get: () => merged.font_size,
+            set: (value) => {
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          };
+
+          return {
+            recolorables: [
+              backgroundRecolorable,
+              surfaceRecolorable,
+              textRecolorable,
+              primaryActionRecolorable,
+              secondaryActionRecolorable
+            ],
+            borderables: [],
+            fontEditable,
+            fontSizeable
+          };
+        },
+        mapToEditPanelValues: (config) => {
+          const merged = Object.assign({}, defaultConfig, config || {});
+          return new Map([
+            ["home_hero_title", merged.home_hero_title],
+            ["home_hero_subtitle", merged.home_hero_subtitle],
+            ["whatsapp_button_text", merged.whatsapp_button_text],
+            ["supplements_title", merged.supplements_title],
+            ["footer_address", merged.footer_address]
+          ]);
+        }
+      });
+    })();
+
+    // Navegação entre "páginas" (SPA simples)
+    function showPage(pageId) {
+      const pages = document.querySelectorAll("[data-page]");
+      pages.forEach(page => {
+        page.classList.add("hidden");
+        page.setAttribute("aria-hidden", "true");
+      });
+
+      const target = document.getElementById(pageId);
+      if (target) {
+        target.classList.remove("hidden");
+        target.setAttribute("aria-hidden", "false");
+      }
+
+      // Atualiza estado do menu
+      const navItems = document.querySelectorAll("[data-nav-target]");
+      navItems.forEach(item => {
+        const targetId = item.getAttribute("data-nav-target");
+        if (targetId === pageId) {
+          item.classList.add("border-b-2");
+        } else {
+          item.classList.remove("border-b-2");
+        }
+      });
+    }
+
+    // Função para abrir WhatsApp com produto específico
+    function openWhatsAppProduct(productName) {
+      const message = encodeURIComponent(`Olá, gostaria de saber mais sobre o ${productName}`);
+      const url = `https://wa.me/5599999999999?text=${message}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    // Inicialização de navegação e botões
+    window.addEventListener("DOMContentLoaded", function () {
+      // Página inicial: Suplementos
+      showPage("page-supplements");
+      // Aplica config padrão caso não esteja no Canva
+      if (!window.elementSdk) {
+        applyConfig(defaultConfig);
+      }
+
+      // Liga cliques do menu
+      document.querySelectorAll("[data-nav-target]").forEach(btn => {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          const id = btn.getAttribute("data-nav-target");
+          showPage(id);
+        });
+      });
+
+      // Ações de WhatsApp (botão grande e menores)
+      const whatsappLinks = document.querySelectorAll(".whatsapp-link");
+      whatsappLinks.forEach(link => {
+        link.addEventListener("click", function (e) {
+          e.preventDefault();
+          const url = "https://wa.me/5599999999999?text=Ol%C3%A1%2C%20quero%20saber%20mais%20sobre%20os%20produtos%20da%20EXCLUSIVA%20FITNESS.";
+          window.open(url, "_blank", "noopener,noreferrer");
+        });
+      });
+    });
+  </script>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full w-full m-0 p-0">
+  <div id="app-wrapper" class="h-full w-full overflow-auto flex flex-col"><!-- HEADER / NAV -->
+   <header id="main-navbar" class="w-full border-b border-slate-800">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between" aria-label="Navegação principal"><!-- Logo -->
+     <div class="flex items-center gap-4"><img src="https://i.imgur.com/SEK71ck.png" alt="Logo Exclusiva Fitness" class="h-24 w-auto object-contain" onerror="this.style.display='none'; this.alt='Logo não disponível';">
+      <div class="flex flex-col"><span id="logo-main" class="text-3xl font-black uppercase tracking-wider leading-none">EXCLUSIVA</span> <span id="logo-sub" class="text-base font-semibold uppercase tracking-widest leading-none">FITNESS</span>
+      </div>
+     </div><!-- Menu -->
+     <div class="flex items-center gap-4 text-sm font-medium"><button data-nav-target="page-home" class="nav-link focus-ring px-2 py-1 border-transparent border-b-2"> Home </button> <button data-nav-target="page-supplements" class="nav-link focus-ring px-2 py-1 border-transparent border-b-2"> Suplementos </button> <button class="nav-link btn-secondary whatsapp-link focus-ring hidden sm:inline-flex items-center gap-2 px-3 py-1.5 border rounded-full text-xs uppercase tracking-wide"> <span class="badge-text">WhatsApp</span> </button>
+     </div>
+    </nav>
+   </header><!-- MAIN CONTENT -->
+   <main class="flex-1 w-full">
+    <div class="max-w-6xl mx-auto px-4 py-8 space-y-10"><!-- PÁGINA HOME -->
+     <section id="page-home" data-page class="space-y-0" aria-label="Página inicial"><!-- Horário de Funcionamento -->
+      <section aria-label="Horário de funcionamento" class="py-8">
+       <div class="surface-panel rounded-3xl border-2 border-slate-800 p-8">
+        <div class="flex flex-col md:flex-row items-center gap-8"><!-- Ícone de Relógio -->
+         <div class="flex-shrink-0">
+          <div class="w-24 h-24 rounded-full bg-gradient-to-br from-orange-500/20 to-orange-600/10 flex items-center justify-center">
+           <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg>
+          </div>
+         </div><!-- Horários -->
+         <div class="flex-1 space-y-4 text-center md:text-left">
+          <h2 class="section-title text-main font-bold text-2xl">Horário de Funcionamento</h2>
+          <div class="space-y-2">
+           <div class="flex items-center justify-center md:justify-start gap-3"><span class="text-main font-semibold text-sm min-w-[120px]">Segunda a Sexta</span> <span class="accent-orange font-bold text-lg">08:00 - 20:00</span>
+           </div>
+           <div class="flex items-center justify-center md:justify-start gap-3"><span class="text-main font-semibold text-sm min-w-[120px]">Sábado</span> <span class="accent-orange font-bold text-lg">08:00 - 17:00</span>
+           </div>
+           <div class="flex items-center justify-center md:justify-start gap-3"><span class="text-main font-semibold text-sm min-w-[120px]">Domingo</span> <span class="text-slate-400 text-sm">Fechado</span>
+           </div>
+          </div>
+         </div><!-- Botões de ação -->
+         <div class="flex-shrink-0 flex flex-col gap-3"><button data-nav-target="page-supplements" class="btn-primary focus-ring inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+           </svg><span>Ver Suplementos</span> </button> <button class="btn-secondary whatsapp-link focus-ring inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold uppercase tracking-wider border-2">
+           <svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+           </svg><span class="whatsapp-button-text">Fale Conosco no WhatsApp</span> </button>
+         </div>
+        </div>
+       </div>
+      </section>
+     </section><!-- PÁGINA SUPLEMENTOS -->
+     <section id="page-supplements" data-page class="space-y-8 hidden" aria-label="Página de suplementos" aria-hidden="true">
+      <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+       <div>
+        <p class="badge-text text-xs uppercase tracking-[0.18em] text-slate-400 mb-1">Catálogo exclusivo</p>
+        <h1 id="supplements-title" class="section-title text-main font-semibold">Suplementos</h1>
+        <p class="text-main text-sm text-slate-200 max-w-xl mt-2">Monte seu mix com produtos das principais marcas do mercado: <span class="accent-orange font-semibold">Max Titanium, Dux, Integral Médica</span> e muitas outras.</p>
+       </div><button class="btn-primary whatsapp-link focus-ring inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-[11px] font-semibold uppercase tracking-[0.18em] shadow-lg"> <span class="whatsapp-button-text">Fale Conosco no WhatsApp</span> </button>
+      </header><!-- WHEY PROTEIN -->
+      <div class="space-y-4">
+       <h2 class="section-title text-main font-bold text-xl accent-orange">Whey Protein</h2>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Lista de Whey Protein"><!-- Carnibol -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/YeRokZa.jpg" alt="Carnibol Whey Protein" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Carnibol</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Blueberry, Baunilha</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 199,90</p><button onclick="openWhatsAppProduct('Carnibol')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Max Whey 100% Refil -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/66pvUEM.jpg" alt="Max Whey 100% Refil" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Max Whey 100% Refil</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Baunilha, Cookies &amp; Cream, Chocolate</p>
+         </div>
+         <p class="text-main text-sm text-slate-300">Consulte o preço</p><button onclick="openWhatsAppProduct('Max Whey 100% Refil')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Max Whey 100% Pote -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/gY9r9Ek.jpg" alt="Max Whey 100% Pote" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Max Whey 100% Pote</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Chocolate, Baunilha</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 139,99</p><button onclick="openWhatsAppProduct('Max Whey 100% Pote')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Protein Crush Refil -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/89KMil5.jpg" alt="Protein Crush Refil" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Protein Crush Refil</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Alpine Cookies, Bear N' Milk Cream, Strambear Swiss, Vitamina de Frutas, Dulce de Leche, Swiss Chocobear</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 129,90</p><button onclick="openWhatsAppProduct('Protein Crush Refil')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Whey 100% Integral -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/EJLpRwq.jpg" alt="Whey 100% Integral" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Whey 100% Integral</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Cookies &amp; Cream, Morango, Baunilha, Gelato de Latte</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 149,90</p><button onclick="openWhatsAppProduct('Whey 100% Integral')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Whey XTR Hiper Whey 100% -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/uDcsnRV.jpg" alt="Whey XTR Hiper Whey 100%" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Whey XTR Hiper Whey 100%</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Coco, Baunilha</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 139,90</p><button onclick="openWhatsAppProduct('Whey XTR Hiper Whey 100%')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Whey FTW Pote -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/izvaPhY.jpg" alt="Whey FTW Pote" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Whey FTW Pote</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Doce de Leite, Baunilha, Morango, Leite</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 129,90</p><button onclick="openWhatsAppProduct('Whey FTW Pote')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Whey FTW Refil -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/PrkAGek.jpg" alt="Whey FTW Refil" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Whey FTW Refil</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Doce de Leite, Baunilha, Morango, Leite</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 99,90</p><button onclick="openWhatsAppProduct('Whey FTW Refil')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Whey Nutrata Refil -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/TE1VmeY.jpg" alt="Whey Nutrata Refil" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Whey Nutrata Refil</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Cookies, Chocolate, Baunilha</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 149,90</p><button onclick="openWhatsAppProduct('Whey Nutrata Refil')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Tasty Whey Adaptogen -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/Itbto7I.jpg" alt="Tasty Whey Adaptogen" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Tasty Whey Adaptogen</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Original, Cookies</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 199,90</p><button onclick="openWhatsAppProduct('Tasty Whey Adaptogen')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Whey Concentrado Dux -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/BNxl6Iy.jpg" alt="Whey Concentrado Dux" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <div class="flex items-center gap-2">
+           <p class="text-main text-sm font-semibold">Whey Concentrado Dux</p><span class="badge-text text-[9px] px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 uppercase tracking-wider">Concentrado</span>
+          </div>
+          <p class="badge-text text-[11px] text-slate-400">Diversos sabores disponíveis</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 239,90</p><button onclick="openWhatsAppProduct('Whey Concentrado Dux')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article>
+       </div>
+      </div><!-- PRÉ-TREINOS -->
+      <div class="space-y-4 mt-12">
+       <h2 class="section-title text-main font-bold text-xl accent-orange">Pré-Treinos</h2>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Lista de Pré-Treinos"><!-- Horus Max -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/rvHaZmK.jpg" alt="Horus Max 300g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Horus Max 300g</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Frutas Vermelhas, Maçã Verde, Blue Ice, Citrus</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 139,90</p><button onclick="openWhatsAppProduct('Horus Max 300g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Danger BNS -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/SZSy083.jpg" alt="Danger BNS" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Danger BNS</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Maçã Verde, Frutas Vermelhas</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 79,90</p><button onclick="openWhatsAppProduct('Danger BNS')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Évora PW -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/E7gar51.jpg" alt="Évora PW 300g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Évora PW 300g</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Limão, Frutas Vermelhas</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 149,90</p><button onclick="openWhatsAppProduct('Évora PW 300g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Diabo Verde -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/8cKMPhk.jpg" alt="Diabo Verde" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Diabo Verde</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Energético, Frutas Amarelas</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 149,90</p><button onclick="openWhatsAppProduct('Diabo Verde')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Dragon GTX -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/ldCeAEr.jpg" alt="Dragon GTX" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Dragon GTX</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Cereja, Maçã Verde</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 119,90</p><button onclick="openWhatsAppProduct('Dragon GTX')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- BodyAction Pré-Night -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/9GCrYon.jpg" alt="BodyAction Pré-Night" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">BodyAction Pré-Night</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Açaí com Guaraná, Morango com Hortelã</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 99,90</p><button onclick="openWhatsAppProduct('BodyAction Pré-Night')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article>
+       </div>
+      </div><!-- CREATINAS -->
+      <div class="space-y-4 mt-12">
+       <h2 class="section-title text-main font-bold text-xl accent-orange">Creatinas</h2>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Lista de Creatinas"><!-- Creatina Max -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/GoxOfO7.jpg" alt="Creatina Max 300g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Creatina Max 300g</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 119,90</p><button onclick="openWhatsAppProduct('Creatina Max 300g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Creatina Probiótica 300g -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/kiesUNg.jpg" alt="Creatina Probiótica 300g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Creatina Probiótica 300g</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 99,90</p><button onclick="openWhatsAppProduct('Creatina Probiótica 300g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Creatina Probiótica 100g -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/qGglIlV.jpg" alt="Creatina Probiótica 100g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Creatina Probiótica 100g</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 49,90</p><button onclick="openWhatsAppProduct('Creatina Probiótica 100g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Creatina Darklab -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/rnfZbAE.jpg" alt="Creatina Darklab 500g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Creatina Darklab 500g</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 99,90</p><button onclick="openWhatsAppProduct('Creatina Darklab 500g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Creatina Dux -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/roCukdn.jpg" alt="Creatina Dux 300g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Creatina Dux 300g</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 119,90</p><button onclick="openWhatsAppProduct('Creatina Dux 300g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Creatina DNS -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/hvfb4DA.jpg" alt="Creatina DNS 300g" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Creatina DNS 300g</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 89,90</p><button onclick="openWhatsAppProduct('Creatina DNS 300g')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article>
+       </div>
+      </div><!-- OUTROS SUPLEMENTOS -->
+      <div class="space-y-4 mt-12">
+       <h2 class="section-title text-main font-bold text-xl accent-orange">Outros Suplementos</h2>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Lista de Outros Suplementos"><!-- L-Carnitina -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/O58JeY4.jpg" alt="L-Carnitina New Millen" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">L-Carnitina New Millen</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Abacaxi, Limão, Morango</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 99,90</p><button onclick="openWhatsAppProduct('L-Carnitina New Millen')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Ômega 3 -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/1ySII53.jpg" alt="Ômega 3 Nutrata" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Ômega 3 Nutrata</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 189,90</p><button onclick="openWhatsAppProduct('Ômega 3 Nutrata')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Dilaflex -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/SQJHhkK.jpg" alt="Dilaflex BodyAction" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Dilaflex BodyAction</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 59,90</p><button onclick="openWhatsAppProduct('Dilaflex BodyAction')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Hard Mass -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/rXG3NiH.jpg" alt="Hard Mass 18000" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Hard Mass 18000</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Morango, Chocolate, Baunilha</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 149,90</p><button onclick="openWhatsAppProduct('Hard Mass 18000')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article>
+       </div>
+      </div><!-- ALIMENTOS E ENERGÉTICOS -->
+      <div class="space-y-4 mt-12">
+       <h2 class="section-title text-main font-bold text-xl accent-orange">Alimentos e Energéticos</h2>
+       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" aria-label="Lista de Alimentos e Energéticos"><!-- Pasta Nutrata -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/Miiazi9.jpg" alt="Pasta de Amendoim Nutrata" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Pasta de Amendoim Nutrata</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Brownie, Paçoca, Morango, Cookies</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 59,90</p><button onclick="openWhatsAppProduct('Pasta de Amendoim Nutrata')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Pasta Lá Ganeixa -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/Xvr4Vlo.jpg" alt="Pasta Lá Ganeixa" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Pasta Lá Ganeixa</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Leitinho, Chocolate Branco, Chocolate Crocante, Leitinho Black</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 49,99</p><button onclick="openWhatsAppProduct('Pasta Lá Ganeixa')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article><!-- Energel Black -->
+        <article class="surface-panel rounded-2xl border border-slate-800 p-4 card-hover flex flex-col gap-3"><img src="https://i.imgur.com/qycjHvO.jpg" alt="Energel Black" class="w-full aspect-square rounded-xl object-cover" onerror="this.src=''; this.alt='Imagem não disponível'; this.style.display='none';">
+         <div class="space-y-1">
+          <p class="text-main text-sm font-semibold">Energel Black</p>
+          <p class="badge-text text-[11px] text-slate-400">Sabores: Guaraná com Açaí, Morango, Tangerina, Uva, Abacaxi</p>
+         </div>
+         <p class="accent-orange text-base font-bold">R$ 5,99</p><button onclick="openWhatsAppProduct('Energel Black')" class="btn-primary focus-ring w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider mt-auto">
+          <svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+          </svg><span>Chamar no WhatsApp</span> </button>
+        </article>
+       </div>
+      </div>
+     </section>
+    </div>
+   </main><!-- FOOTER -->
+   <footer class="w-full border-t border-slate-800 mt-6">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+     <div class="text-main text-xs text-slate-300 space-y-1">
+      <p class="font-semibold uppercase tracking-[0.2em] text-[10px]">EXCLUSIVA FITNESS</p>
+      <p id="footer-address" class="text-xs">PA 4 lote 4 are comercial qc 10 jardins mangueiral, Brasília, Brazil</p>
+     </div>
+     <div class="flex flex-col items-start sm:items-end gap-2 text-[11px] text-slate-400"><button class="btn-secondary whatsapp-link focus-ring inline-flex items-center gap-2 px-3 py-1.5 rounded-full uppercase tracking-[0.16em]"> <span class="whatsapp-button-text">Fale Conosco no WhatsApp</span> </button>
+      <p class="badge-text text-[10px]">Atendimento personalizado em suplementos.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9aceab01f3ba0129',t:'MTc2NTU1NzY3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
